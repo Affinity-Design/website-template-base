@@ -6,26 +6,30 @@ description: Rules for Phase 1 — analyzing Figma designs, mapping site structu
 
 ## 1.1 — Extract the Design
 
-Use Figma MCP tools in this order:
+Read `.affinity-generation/context/template-base-hydration.json` first. This packet is the source of truth for design data and should include `figma.fileKey`, `figma.url`, `figma.pageSelection`, `figma.frameSelection`, `inputMaterial`, `assets`, `framework.target`, and `execution`.
 
-1. `get_metadata` — file structure, page names, top-level frames
-2. `get_design_context` — for each page/section, extract design code and context
-3. `get_screenshot` — capture visual references for QA comparison
+Use hydrated data in this order:
+
+1. `figma.pageSelection` / `figma.frameSelection` — file structure, page names, routes, top-level frames, and section mappings
+2. `figma.dna` or sibling files in `.affinity-generation/context/` — design code, tokens, typography, colors, spacing, exact copy, and layout context when present
+3. Pre-resolved screenshot references in the hydration packet — visual references for QA comparison when available. If absent, proceed from hydrated design data and rely on the platform-side post-build visual audit.
+
+Do not attempt live Figma tool calls or retries. The platform has already resolved the design data onto disk.
 
 ## 1.2 — Map the Site Structure
 
 Produce `SITE_MAP.md` documenting:
 
-- **Figma file key** (`fileKey`) at the top of the document — Phase 2 agents need this to call Figma MCP tools
+- **Figma file key** (`fileKey`) at the top of the document — Phase 2 agents use this to resolve hydration packet entries
 - Pages identified (Home, About, Contact, etc.)
-- Sections per page (Hero, Features, Testimonials, Footer, etc.) — **each section MUST include its `nodeId`** so Phase 2 agents can call `get_design_context` and `get_screenshot` directly
+- Sections per page (Hero, Features, Testimonials, Footer, etc.) — **each section MUST include its `nodeId` or hydration frame reference** so Phase 2 agents can read the corresponding packet entry directly
 - Shared components (Navbar, Footer, Buttons, Cards, etc.)
 - Design tokens observed (colors, spacing, typography, border radius, shadows)
 - **Content max-width** from the top-level Figma frame (used for `--container-max`)
 
 ## 1.3 — Download and Store Images
 
-The `get_design_context` tool returns asset URLs for all images in the design. These URLs are temporary (expire in 7 days).
+The hydration packet's `assets` manifest contains the pre-resolved absolute URLs for images in the design.
 
 The static asset folder depends on your framework:
 - Next.js / Astro / Vite: `public/assets/images/`
@@ -96,7 +100,7 @@ Document these findings in `SITE_MAP.md` so Phase 2 builds the correct layout st
 
 ## 1.5 — SITE_MAP.md Format (CRITICAL for Phase 2)
 
-The SITE_MAP.md MUST include Figma references so Phase 2 agents can call Figma MCP tools directly. Without these, agents will build from text descriptions and produce inaccurate results.
+The SITE_MAP.md MUST include hydration references so Phase 2 agents can read the right packet entries directly. Without these, agents will build from text descriptions and produce inaccurate results.
 
 **Required format:**
 
@@ -114,11 +118,11 @@ Node ID: `<pageNodeId>`
 
 #### Sections
 
-| Section | Node ID | Component | Background | Notes |
-|---------|---------|-----------|------------|-------|
-| Navbar  | `<id>`  | Navbar    | transparent | Shared |
-| Hero    | `<id>`  | Hero      | dark        | Full-width bg image |
-| ...     | ...     | ...       | ...         | ... |
+| Section | Node ID / Hydration Ref | Component | Background | Notes |
+|---------|--------------------------|-----------|------------|-------|
+| Navbar  | `<id-or-ref>`            | Navbar    | transparent | Shared |
+| Hero    | `<id-or-ref>`            | Hero      | dark        | Full-width bg image |
+| ...     | ...                      | ...       | ...         | ... |
 
 ## Shared Components
 | Component | Node ID | Description |
@@ -129,4 +133,4 @@ Node ID: `<pageNodeId>`
 
 The "Component" column lists the component name only — append your framework's file extension when you create the file (`.tsx` for Next.js/React, `.astro` for Astro, `.vue` for Vue, `.svelte` for SvelteKit).
 
-Every section entry MUST have a `nodeId`. Phase 2 depends on these references to call `get_design_context` and `get_screenshot` per section.
+Every section entry MUST have a `nodeId` or hydration frame reference. Phase 2 depends on these references to read `figma.frameSelection`, `figma.dna`, available screenshot references, and asset data per section.

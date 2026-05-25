@@ -1,20 +1,21 @@
 ---
-description: Rules for Phase 0 — auto-generating the project brief from the first Figma page
+description: Rules for Phase 0 — auto-generating the project brief from the hydrated Figma packet
 ---
 
-# Phase 0: Project Brief (Auto-Generated from Figma)
+# Phase 0: Project Brief (Auto-Generated from Hydration Packet)
 
-The project brief is always extracted from the **first page** of the Figma file. Do NOT ask the user for brief details manually — parse them from the design.
+The project brief is always extracted from the **first page** in `.affinity-generation/context/template-base-hydration.json`. Do NOT ask the user for brief details manually — parse them from the hydrated design data.
 
 ## Process
 
-1. Use `get_metadata` on the Figma URL to identify the first page and its frames
-2. Use `get_design_context` on the first page to extract all design information
-3. Use `get_screenshot` on the first page for visual reference
+1. Read `.affinity-generation/context/template-base-hydration.json`
+2. Use `figma.pageSelection` / `figma.frameSelection` to identify the first page and its frames
+3. Use `figma.dna` or sibling hydrated context files for design tokens, typography, colors, layout data, and exact copy when present
+4. Use the pre-resolved screenshot reference in the hydration packet if present; otherwise proceed from hydrated design data and rely on the platform-side post-build visual audit
 
 ## What to Extract
 
-Parse the first Figma page and derive:
+Parse the first hydrated Figma page and derive:
 
 1. **Project name** — from the file name or any title/heading text on the first page
 2. **Brand colors** — extract all unique colors used (backgrounds, text, accents, borders) as hex values. Categorize as primary, secondary, accent, neutrals

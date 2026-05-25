@@ -16,24 +16,24 @@ description: Rules for Phase 2 — building the desktop version from Figma desig
 
 Build desktop-first but **include responsive styles in every component**. Do not defer responsive to a later phase — each component must work from desktop down to mobile (320px) when it's built.
 
-## Figma MCP Access (CRITICAL — do this FIRST)
+## Hydration Packet Access (CRITICAL — do this FIRST)
 
-Every component MUST be built from live Figma data, not from text descriptions or summaries in SITE_MAP.md.
+Every component MUST be built from `.affinity-generation/context/template-base-hydration.json` and any sibling hydrated context files, not from live Figma calls, text descriptions, or summaries in SITE_MAP.md.
 
 **Required workflow for each section:**
 
-1. **Read SITE_MAP.md** — get the `fileKey` and `nodeId` for the section you're building
-2. **Call `get_design_context`** with the fileKey and nodeId — extract exact text, colors, typography, spacing, layout structure, and image references
-3. **Call `get_screenshot`** with the fileKey and nodeId — use as visual reference for layout, alignment, column count, and positioning
+1. **Read the hydration packet and SITE_MAP.md** — get the `fileKey`, `nodeId`, route, and frame mapping for the section you're building
+2. **Read the matching hydration entry** — use `figma.frameSelection`, `figma.dna`, sibling hydrated context files, and `assets` to extract exact text, colors, typography, spacing, layout structure, and image references
+3. **Use the hydrated screenshot reference if present** — use it as visual reference for layout, alignment, column count, and positioning. If no screenshot reference is present, proceed from hydrated design data and rely on the platform-side post-build visual audit.
 4. **Build the component** using ONLY the data from steps 2 and 3
 
-**EXACT TEXT**: Use character-for-character text from `get_design_context`. Never paraphrase, rewrite, shorten, or invent copy. If the design says "Transform your business" do NOT write "Transforming businesses" or any variation.
+**EXACT TEXT**: Use character-for-character text from the hydrated frame data or Figma DNA. Never paraphrase, rewrite, shorten, or invent copy. If the design says "Transform your business" do NOT write "Transforming businesses" or any variation.
 
 **NO INVENTED FEATURES**: Do not add animations, scroll effects, parallax, hover transitions, gradient overlays, or any visual/interactive behavior unless it is explicitly present in the Figma design or specifically requested by the user. Simple, static HTML/CSS that matches the design is always correct.
 
-**LAYOUT FROM SCREENSHOT**: Column count, flex direction, alignment, spacing, and content positioning must match the screenshot. Do not guess or assume layout — verify against the visual reference.
+**LAYOUT FROM HYDRATED DATA**: Column count, flex direction, alignment, spacing, and content positioning must match hydrated layout data and the screenshot reference when present. Do not guess or assume layout.
 
-**IMAGE TREATMENTS FROM SCREENSHOT**: Match the exact image presentation — aspect ratio, cropping, border-radius, overlaps, and sizing as shown in the screenshot. Do not add effects (shadows, overlays, shape masks) that aren't in the design.
+**IMAGE TREATMENTS FROM HYDRATED DATA**: Match the exact image presentation — aspect ratio, cropping, border-radius, overlaps, and sizing from the packet or screenshot reference when present. Do not add effects (shadows, overlays, shape masks) that aren't in the design.
 
 ## Global Setup
 
@@ -172,15 +172,15 @@ The fluid scaling system handles most sizing automatically — font-sizes, paddi
 - The global CSS reset already sets headings to use `var(--font-heading)` and a base line-height, but it does NOT set font-weight — the browser default bold must be explicitly overridden when Figma specifies Regular (400).
 - When building headings, always set `font-weight` explicitly to match Figma. Never rely on browser defaults.
 
-## Desktop Fidelity (Source of Truth: Figma MCP)
+## Desktop Fidelity (Source of Truth: Hydration Packet)
 
-All fidelity checks reference data from `get_design_context` and `get_screenshot` — not from memory, summaries, or SITE_MAP.md descriptions.
+All fidelity checks reference data from the hydration packet, `figma.dna`, sibling hydrated context files, and available screenshot references — not from live Figma calls, memory, summaries, or SITE_MAP.md descriptions.
 
-- **Spacing**: Match exact values from `get_design_context` (converted to em)
-- **Typography**: Match exact font-size (em), font-weight, line-height (unitless ratio), letter-spacing (px) from `get_design_context`. Never assume headings are bold — use the actual weight from Figma.
-- **Colors**: Match exact hex values from `get_design_context`, mapped to CSS custom properties
-- **Layout**: Column count, flex direction, alignment must match `get_screenshot`
-- **Border radius, shadows, visual treatments**: Match exact values from `get_design_context`
-- **Text content**: Character-for-character match from `get_design_context` — no lorem ipsum, no rewriting
-- **Images**: Use downloaded images from your static asset folder, presented exactly as shown in `get_screenshot`
+- **Spacing**: Match exact values from hydrated frame data or Figma DNA (converted to em)
+- **Typography**: Match exact font-size (em), font-weight, line-height (unitless ratio), letter-spacing (px) from hydrated frame data or Figma DNA. Never assume headings are bold — use the actual weight from Figma.
+- **Colors**: Match exact hex values from hydrated frame data or Figma DNA, mapped to CSS custom properties
+- **Layout**: Column count, flex direction, and alignment must match hydrated layout data and screenshot references when present
+- **Border radius, shadows, visual treatments**: Match exact values from hydrated frame data or Figma DNA
+- **Text content**: Character-for-character match from hydrated frame data or Figma DNA — no lorem ipsum, no rewriting
+- **Images**: Use downloaded images from your static asset folder, presented exactly as shown in screenshot references when present
 - **No additions**: Do NOT add animations, transitions, hover effects, or decorative elements that don't appear in the Figma design

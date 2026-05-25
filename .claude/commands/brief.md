@@ -11,9 +11,10 @@ Figma URL: $ARGUMENTS
 
 Then:
 
-1. Use `get_metadata` to identify the first page in the Figma file
-2. Use `get_design_context` on the first page to extract all design details
-3. Use `get_screenshot` on the first page for visual reference
+1. Read `.affinity-generation/context/template-base-hydration.json`
+2. Use `figma.pageSelection` / `figma.frameSelection` to identify the first page and its frames
+3. Use `figma.dna` or sibling hydrated context files for design tokens, typography, colors, and layout data when present
+4. Use the pre-resolved screenshot reference in the hydration packet if present; otherwise proceed from hydrated design data and rely on the platform-side post-build visual audit
 
 From the first page, extract:
 - Project name (from file name or heading text)
@@ -29,4 +30,4 @@ From the first page, extract:
 
 Save everything to `PROJECT_BRIEF.md` and update your global stylesheet (`global.css` from this starter — relocate to your framework's standard location: `app/globals.css` for Next.js, `src/app.css` for SvelteKit, `src/styles/global.css` for Astro/Vite) so the design tokens match.
 
-If `PROJECT_BRIEF.md` already exists, show its contents and ask if the user wants to regenerate it from the Figma file.
+If `PROJECT_BRIEF.md` already exists, show its contents and ask if the user wants to regenerate it from the hydrated Figma packet.

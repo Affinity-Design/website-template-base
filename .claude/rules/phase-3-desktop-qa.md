@@ -33,20 +33,20 @@ For each image in the section:
 
 ## SVG & Image Visibility Check (CRITICAL — catches invisible or mismatched images)
 
-Figma MCP exports SVGs with fill values from the source component. The fills are correct as-is — do NOT change them. The problem is usually that the agent invents wrapper/card backgrounds that don't exist in the design, making the SVGs invisible.
+Hydrated SVG assets already include fill values from the source component. The fills are correct as-is — do NOT change them. The problem is usually that the agent invents wrapper/card backgrounds that don't exist in the design, making the SVGs invisible.
 
 **For every SVG/image in the section:**
-1. Compare against the Figma screenshot — how does the image appear in the original design?
+1. Compare against the hydrated screenshot reference when present — how does the image appear in the original design?
 2. Check the parent container's background in the component CSS
 3. **If the image is invisible**, the fix is almost always to **remove an invented background** from the container, NOT to change the SVG fills. The SVG fills from Figma are correct — the wrapper styling is what's wrong.
-4. Only as a last resort, if the Figma screenshot clearly shows a different fill than what the SVG has, adjust the SVG or use CSS overrides.
+4. Only as a last resort, if the hydrated screenshot reference clearly shows a different fill than what the SVG has, adjust the SVG or use CSS overrides.
 5. **Key principle**: Trust the SVG fills from Figma. Verify the container styling matches the design.
 
 ## Visual Fidelity Check
 
 For each section:
-1. Use Figma MCP `get_screenshot` for the original design reference
-2. Compare the built section against the Figma design
+1. Use the pre-resolved screenshot reference in `.affinity-generation/context/template-base-hydration.json` when present
+2. Compare the built section against hydrated design data and the screenshot reference when present
 3. Verify:
    - Spacing matches (margins, padding, gaps)
    - Typography matches (size, weight, line-height, color)
@@ -79,16 +79,16 @@ Every component MUST include media queries. Verify:
 - Fixed widths become fluid on mobile
 - Touch targets are at least 2.75em on mobile
 
-## Figma Source-of-Truth Check (CRITICAL — run before visual fidelity)
+## Hydration Source-of-Truth Check (CRITICAL — run before visual fidelity)
 
-For each section, read the `fileKey` and `nodeId` from SITE_MAP.md, then:
+For each section, read `.affinity-generation/context/template-base-hydration.json` and the `fileKey`, `nodeId`, route, and frame mapping from SITE_MAP.md, then:
 
-1. **Text accuracy**: Call `get_design_context` and compare every piece of text in the built component character-for-character against the Figma data. Flag any paraphrased, rewritten, shortened, or invented copy.
-2. **Layout structure**: Call `get_screenshot` and verify column count, flex direction, content positioning, and alignment match the screenshot exactly. Flag any layout that doesn't match.
-3. **Content positioning**: Verify element order, alignment (left/center/right), and relative positioning match the screenshot.
+1. **Text accuracy**: Compare every piece of text in the built component character-for-character against hydrated frame data or Figma DNA. Flag any paraphrased, rewritten, shortened, or invented copy.
+2. **Layout structure**: Verify column count, flex direction, content positioning, and alignment match hydrated layout data and the screenshot reference when present. Flag any layout that doesn't match.
+3. **Content positioning**: Verify element order, alignment (left/center/right), and relative positioning match hydrated layout data and the screenshot reference when present.
 4. **No invented features**: Scan the component CSS for `animation`, `@keyframes`, `transition`, `transform` (used for motion), `scroll-behavior`, or `parallax`-related styles that are NOT present in the Figma design. Flag and remove any that were added without basis in the design.
 5. **No extra elements**: Verify every HTML element and visual treatment in the component corresponds to something in the Figma design. Flag decorative elements, overlays, gradients, or shapes that don't exist in the design.
-6. **Image treatments**: Compare image presentation (aspect ratio, border-radius, shadows, overlaps) against the screenshot. Flag any effects not in the design.
+6. **Image treatments**: Compare image presentation (aspect ratio, border-radius, shadows, overlaps) against hydrated design data and screenshot references when present. Flag any effects not in the design.
 
 ## Auto-Correction Loop
 

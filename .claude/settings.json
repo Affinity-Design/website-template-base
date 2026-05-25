@@ -15,12 +15,7 @@
       "WebFetch(domain:support.claude.com)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:api.github.com)",
-      "WebFetch(domain:raw.githubusercontent.com)",
-      "mcp__claude_ai_Figma__get_metadata",
-      "mcp__claude_ai_Figma__get_design_context",
-      "mcp__claude_ai_Figma__get_screenshot",
-      "mcp__claude_ai_Figma__get_code_connect_map",
-      "mcp__claude_ai_Figma__get_code_connect_suggestions"
+      "WebFetch(domain:raw.githubusercontent.com)"
     ],
     "deny": [],
     "ask": [
