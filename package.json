@@ -1,0 +1,17 @@
+{
+  "name": "website-template-base",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && node -e \"const fs=require('fs');fs.rmSync('dist',{recursive:true,force:true});fs.renameSync('out','dist')\""
+  },
+  "dependencies": {
+    "next": "16.2.8",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "overrides": {
+    "postcss": "8.5.10"
+  }
+}
