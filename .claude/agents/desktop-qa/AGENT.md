@@ -12,11 +12,11 @@ Before QA-ing any section, read `.affinity-generation/context/template-base-hydr
 
 ## QA Workflow for Each Section
 
-1. **Get hydrated design data**: Read the matching `figma.frameSelection` entry and `figma.dna` or sibling hydrated context for exact text, colors, spacing, typography, layout data, and asset references. Use the pre-resolved screenshot reference if present; otherwise rely on the platform-side post-build visual audit for final screenshot comparison.
+1. **Get hydrated design data**: Read the matching `figma.frameSelection` entry and `figma.dna` or sibling hydrated context for exact text, colors, spacing, typography, layout data, and asset references. Use `.affinity-generation/design-comps/*.png` as the route-level visual target; use pre-resolved screenshot references as supporting context when present.
 2. **Read the built component code**
 3. **Hydration source-of-truth check** (do this FIRST):
    - **Text accuracy**: Compare every piece of text character-for-character against hydrated frame data or Figma DNA. Flag any paraphrased, rewritten, or invented copy.
-   - **Layout verification**: Compare column count, flex direction, alignment, and content positioning against hydrated layout data and the screenshot reference when present. Flag any mismatch.
+   - **Layout verification**: Compare column count, flex direction, alignment, and content positioning against hydrated layout data, the route comp PNG, and the screenshot reference when present. Flag any mismatch.
    - **No invented features**: Scan CSS for `animation`, `@keyframes`, `transition`, `transform` (motion), `scroll-behavior`, or parallax styles. If these are NOT in the Figma design and were NOT requested by the user, flag and remove them.
    - **No extra elements**: Every HTML element and visual treatment must correspond to something in the Figma design. Flag decorative elements, overlays, or gradients not in the design.
 4. **SVG/image visibility check** (catches invisible or mismatched images):

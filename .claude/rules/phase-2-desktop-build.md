@@ -24,7 +24,7 @@ Every component MUST be built from `.affinity-generation/context/template-base-h
 
 1. **Read the hydration packet and SITE_MAP.md** — get the `fileKey`, `nodeId`, route, and frame mapping for the section you're building
 2. **Read the matching hydration entry** — use `figma.frameSelection`, `figma.dna`, sibling hydrated context files, and `assets` to extract exact text, colors, typography, spacing, layout structure, and image references
-3. **Use the hydrated screenshot reference if present** — use it as visual reference for layout, alignment, column count, and positioning. If no screenshot reference is present, proceed from hydrated design data and rely on the platform-side post-build visual audit.
+3. **Use the route comp PNG** — use `.affinity-generation/design-comps/*.png` as the route-level visual target for layout, alignment, column count, and positioning. If a hydrated screenshot reference is also present, use it as supporting context.
 4. **Build the component** using ONLY the data from steps 2 and 3
 
 **EXACT TEXT**: Use character-for-character text from the hydrated frame data or Figma DNA. Never paraphrase, rewrite, shorten, or invent copy. If the design says "Transform your business" do NOT write "Transforming businesses" or any variation.
@@ -174,7 +174,7 @@ The fluid scaling system handles most sizing automatically — font-sizes, paddi
 
 ## Desktop Fidelity (Source of Truth: Hydration Packet)
 
-All fidelity checks reference data from the hydration packet, `figma.dna`, sibling hydrated context files, and available screenshot references — not from live Figma calls, memory, summaries, or SITE_MAP.md descriptions.
+All fidelity checks reference data from the hydration packet, `figma.dna`, sibling hydrated context files, `.affinity-generation/design-comps/*.png` route comps, and available screenshot references — not from live Figma calls, memory, summaries, or SITE_MAP.md descriptions.
 
 - **Spacing**: Match exact values from hydrated frame data or Figma DNA (converted to em)
 - **Typography**: Match exact font-size (em), font-weight, line-height (unitless ratio), letter-spacing (px) from hydrated frame data or Figma DNA. Never assume headings are bold — use the actual weight from Figma.

@@ -45,8 +45,8 @@ Hydrated SVG assets already include fill values from the source component. The f
 ## Visual Fidelity Check
 
 For each section:
-1. Use the pre-resolved screenshot reference in `.affinity-generation/context/template-base-hydration.json` when present
-2. Compare the built section against hydrated design data and the screenshot reference when present
+1. Use the matching `.affinity-generation/design-comps/*.png` route comp as the visual target
+2. Compare the built section against hydrated design data, the route comp PNG, and the screenshot reference when present
 3. Verify:
    - Spacing matches (margins, padding, gaps)
    - Typography matches (size, weight, line-height, color)
@@ -84,8 +84,8 @@ Every component MUST include media queries. Verify:
 For each section, read `.affinity-generation/context/template-base-hydration.json` and the `fileKey`, `nodeId`, route, and frame mapping from SITE_MAP.md, then:
 
 1. **Text accuracy**: Compare every piece of text in the built component character-for-character against hydrated frame data or Figma DNA. Flag any paraphrased, rewritten, shortened, or invented copy.
-2. **Layout structure**: Verify column count, flex direction, content positioning, and alignment match hydrated layout data and the screenshot reference when present. Flag any layout that doesn't match.
-3. **Content positioning**: Verify element order, alignment (left/center/right), and relative positioning match hydrated layout data and the screenshot reference when present.
+2. **Layout structure**: Verify column count, flex direction, content positioning, and alignment match hydrated layout data, the route comp PNG, and the screenshot reference when present. Flag any layout that doesn't match.
+3. **Content positioning**: Verify element order, alignment (left/center/right), and relative positioning match hydrated layout data, the route comp PNG, and the screenshot reference when present.
 4. **No invented features**: Scan the component CSS for `animation`, `@keyframes`, `transition`, `transform` (used for motion), `scroll-behavior`, or `parallax`-related styles that are NOT present in the Figma design. Flag and remove any that were added without basis in the design.
 5. **No extra elements**: Verify every HTML element and visual treatment in the component corresponds to something in the Figma design. Flag decorative elements, overlays, gradients, or shapes that don't exist in the design.
 6. **Image treatments**: Compare image presentation (aspect ratio, border-radius, shadows, overlaps) against hydrated design data and screenshot references when present. Flag any effects not in the design.
