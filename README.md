@@ -27,6 +27,8 @@ Required Next.js settings live in `next.config.mjs`:
 - `images: { unoptimized: true }`
 - `trailingSlash: true`
 
+The `next` dependency must stay pinned to a published stable npm release with a matching `package-lock.json`. Do not use `-preview`, `-canary`, or `-rc` versions because clean build containers download the exact matching `@next/swc-*` package.
+
 The build script is:
 
 ```bash

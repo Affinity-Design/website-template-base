@@ -11,6 +11,7 @@ Run the complete orchestration pipeline for: $ARGUMENTS
 2. Use `.affinity-generation/design-comps/*.png` as the route-level Figma design comp source for visual targets. PNGs under `public/template-assets/` are this template's stock art -- never treat them as the design target.
 3. Verify the packet's Figma URL is present and matches the user's URL when one is provided.
 4. Do not attempt live Figma tool calls. Design data is delivered on disk before this repo is cloned, and visual comparison runs later in the platform-side audit.
+5. If you touch `next`, pin a published stable release from npm and regenerate `package-lock.json`; never use `-preview`, `-canary`, or `-rc` versions because clean build containers must download the matching `@next/swc-*` tarball.
 
 ## Execute phases in order
 
